@@ -17,7 +17,7 @@
 <script>
 // ⚠️ IMPORTANT: After transferring to conferenceshowdown@gmail.com and redeploying Apps Script,
 // replace the URL below with the new Web App deployment URL
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzUKtVw1u5wpmc1QVFtmElio21S09SGzunE1gRweuWAw-HhRaQdo2BzdtkbRrTs-DEYYQ/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvKL_bzmlJKf-4t6s680myK3PIdeSecdC5bmA2RqrnFVm6Ec-s0kZfhz1XrZj5IqrsJg/exec';
 const CONFERENCES = {"ACC":{"teams":["Duke","Virginia","Clemson","Miami (FL)","NC State","North Carolina","Louisville","SMU","California","Virginia Tech","Syracuse","Florida St.","Stanford","Wake Forest","Notre Dame","Boston College","Georgia Tech","Pittsburgh"],"tournament_start":"2026-03-10","qualifying_teams":15,"host_city":"Charlotte, NC"},"ASUN":{"teams":["Austin Peay","Central Ark.","Queens (NC)","Lipscomb","West Ga.","FGCU","Bellarmine","Jacksonville","Eastern Ky.","Stetson","North Florida","North Ala."],"tournament_start":"2026-03-04","qualifying_teams":12,"host_city":"Jacksonville, FL"},"America East":{"teams":["NJIT","UMBC","Vermont","UMass Lowell","UAlbany","New Hampshire","Bryant","Maine","Binghamton"],"tournament_start":"2026-03-07","qualifying_teams":8,"host_city":"Higher seed"},"American":{"teams":["South Fla.","Tulsa","Wichita St.","Temple","Charlotte","Memphis","UAB","Tulane","North Texas","Fla. Atlantic","Rice","East Carolina","UTSA"],"tournament_start":"2026-03-11","qualifying_teams":10,"host_city":"Birmingham, AL"},"Atlantic 10":{"teams":["Saint Louis","VCU","George Mason","Dayton","Duquesne","Saint Joseph's","Davidson","George Washington","Rhode Island","Fordham","Richmond","St. Bonaventure","La Salle","Loyola Chicago"],"tournament_start":"2026-03-11","qualifying_teams":14,"host_city":"Pittsburgh, PA"},"Big 12":{"teams":["Houston","Arizona","Iowa St.","Texas Tech","Kansas","BYU","West Virginia","UCF","TCU","Cincinnati","Oklahoma St.","Arizona St.","Colorado","Baylor","Kansas St.","Utah"],"tournament_start":"2026-03-10","qualifying_teams":16,"host_city":"Kansas City, MO"},"Big East":{"teams":["UConn","St. John's (NY)","Villanova","Seton Hall","Creighton","Xavier","Georgetown","DePaul","Butler","Providence","Marquette"],"tournament_start":"2026-03-11","qualifying_teams":11,"host_city":"New York, NY"},"Big Sky":{"teams":["Portland St.","Montana St.","Montana","Eastern Wash.","Northern Colo.","Weber St.","Idaho","Sacramento St.","Northern Ariz.","Idaho St."],"tournament_start":"2026-03-07","qualifying_teams":10,"host_city":"Boise, ID"},"Big South":{"teams":["High Point","Winthrop","Radford","Presbyterian","UNC Asheville","Longwood","Charleston So.","USC Upstate","Gardner-Webb"],"tournament_start":"2026-03-04","qualifying_teams":9,"host_city":"Johnson City, TN"},"Big Ten":{"teams":["Michigan","Illinois","Nebraska","Purdue","Michigan St.","Wisconsin","UCLA","Iowa","Ohio St.","Indiana","Southern California","Washington","Minnesota","Maryland","Rutgers","Oregon","Penn St.","Northwestern"],"tournament_start":"2026-03-10","qualifying_teams":18,"host_city":"Chicago, IL"},"Big West":{"teams":["Hawaii","UC Irvine","UC Santa Barbara","CSUN","UC Davis","UC San Diego","Cal St. Fullerton","Cal Poly","Long Beach St.","UC Riverside","CSU Bakersfield"],"tournament_start":"2026-03-11","qualifying_teams":8,"host_city":"Henderson, NV"},"CAA":{"teams":["UNCW","Col. of Charleston","Monmouth","Hofstra","Stony Brook","Drexel","William & Mary","Campbell","Hampton","Elon","Towson","N.C. A&T","Northeastern"],"tournament_start":"2026-03-06","qualifying_teams":13,"host_city":"Washington, D.C."},"Conference USA":{"teams":["Liberty","Sam Houston","Jacksonville St.","Western Ky.","Louisiana Tech","Missouri St.","Kennesaw St.","Middle Tenn.","UTEP","FIU","Delaware","New Mexico St."],"tournament_start":"2026-03-10","qualifying_teams":10,"host_city":"Huntsville, AL"},"Horizon":{"teams":["Wright St.","Oakland","Robert Morris","Green Bay","Purdue Fort Wayne","Detroit Mercy","Northern Ky.","Milwaukee","Youngstown St.","Cleveland St.","IU Indy"],"tournament_start":"2026-03-02","qualifying_teams":11,"host_city":"Higher seed first 3 rounds, then Indianapolis, IN"},"Ivy League":{"teams":["Yale","Harvard","Penn","Cornell","Columbia","Dartmouth","Princeton","Brown"],"tournament_start":"2026-03-14","qualifying_teams":4,"host_city":"Ithaca, NY"},"MAAC":{"teams":["Merrimack","Saint Peter's","Siena","Quinnipiac","Marist","Fairfield","Mount St. Mary's","Sacred Heart","Manhattan","Iona","Niagara","Canisius","Rider"],"tournament_start":"2026-03-05","qualifying_teams":10,"host_city":"Atlantic City, NJ"},"MAC":{"teams":["Miami (OH)","Akron","Kent St.","Bowling Green","Toledo","Ohio","Massachusetts","Buffalo","Central Mich.","Western Mich.","NIU","Ball St.","Eastern Mich."],"tournament_start":"2026-03-12","qualifying_teams":8,"host_city":"Cleveland, OH"},"MEAC":{"teams":["Morgan St.","Howard","N.C. Central","South Carolina St.","Norfolk St.","UMES","Coppin St.","Delaware St."],"tournament_start":"2026-03-11","qualifying_teams":7,"host_city":"Norfolk, VA"},"Missouri Valley":{"teams":["Belmont","Bradley","Murray St.","UIC","Illinois St.","UNI","Valparaiso","Southern Ill.","Drake","Indiana St.","Evansville"],"tournament_start":"2026-03-05","qualifying_teams":11,"host_city":"St. Louis, MO"},"Mountain West":{"teams":["Utah St.","San Diego St.","New Mexico","Nevada","Grand Canyon","UNLV","Boise St.","Colorado St.","Fresno St.","Wyoming","San Jose St.","Air Force"],"tournament_start":"2026-03-11","qualifying_teams":12,"host_city":"Las Vegas, NV"},"Northeast":{"teams":["LIU","Central Conn. St.","Le Moyne","Mercyhurst","FDU","New Haven","Stonehill","Wagner","Saint Francis","Chicago St."],"tournament_start":"2026-03-04","qualifying_teams":8,"host_city":"Higher seed"},"Ohio Valley":{"teams":["UT Martin","Tennessee St.","Southeast Mo. St.","Morehead St.","SIUE","Lindenwood","Eastern Ill.","Little Rock","Tennessee Tech","Southern Ind.","Western Ill."],"tournament_start":"2026-03-04","qualifying_teams":8,"host_city":"Evansville, IN"},"Patriot":{"teams":["Navy","Colgate","Lehigh","American","Boston U.","Loyola Maryland","Lafayette","Bucknell","Army West Point","Holy Cross"],"tournament_start":"2026-03-03","qualifying_teams":10,"host_city":"Higher seed"},"SEC":{"teams":["Florida","Arkansas","Vanderbilt","Alabama","Tennessee","Kentucky","Texas A&M","Missouri","Texas","Georgia","Auburn","Mississippi St.","Oklahoma","Ole Miss","LSU","South Carolina"],"tournament_start":"2026-03-11","qualifying_teams":16,"host_city":"Nashville, TN"},"SWAC":{"teams":["Bethune-Cookman","Southern U.","Ark.-Pine Bluff","Alabama A&M","Jackson St.","Florida A&M","Texas Southern","Grambling","Alabama St.","Alcorn","Prairie View","Mississippi Val."],"tournament_start":"2026-03-09","qualifying_teams":12,"host_city":"Atlanta, GA"},"SoCon":{"teams":["ETSU","Mercer","Wofford","Furman","Samford","UNC Greensboro","Western Caro.","The Citadel","Chattanooga","VMI"],"tournament_start":"2026-03-06","qualifying_teams":10,"host_city":"Asheville, NC"},"Southland":{"teams":["SFA","McNeese","UTRGV","A&M-Corpus Christi","Nicholls","New Orleans","Lamar University","Northwestern St.","UIW","East Texas A&M","Houston Christian","Southeastern La."],"tournament_start":"2026-03-08","qualifying_teams":8,"host_city":"Lake Charles, LA"},"Summit":{"teams":["North Dakota St.","St. Thomas (MN)","North Dakota","Omaha","South Dakota","Denver","South Dakota St.","Oral Roberts","Kansas City"],"tournament_start":"2026-03-04","qualifying_teams":9,"host_city":"Sioux Falls, SD"},"Sun Belt":{"teams":["South Alabama","App State","Troy","Marshall","Texas St.","Coastal Carolina","Arkansas St.","Ga. Southern","Southern Miss.","Louisiana","James Madison","Georgia St.","Old Dominion","ULM"],"tournament_start":"2026-03-03","qualifying_teams":14,"host_city":"Pensacola, FL"},"WAC":{"teams":["California Baptist","Utah Tech","Utah Valley","UT Arlington","Southern Utah","Abilene Christian","Tarleton St."],"tournament_start":"2026-03-11","qualifying_teams":7,"host_city":"Las Vegas, NV"},"WCC":{"teams":["Gonzaga","Santa Clara","Saint Mary's (CA)","Pacific","San Francisco","Oregon St.","Washington St.","Seattle U","Portland","San Diego","LMU (CA)","Pepperdine"],"tournament_start":"2026-03-05","qualifying_teams":12,"host_city":"Las Vegas, NV"}};
 
 let S = {
@@ -29,8 +29,7 @@ let S = {
     showRules: false,
     viewingUserId: null,
     showRecovery: false,
-    recoveryMessage: '',
-    picksSummaryExpanded: localStorage.getItem('ctc_summary_expanded') !== 'false'
+    recoveryMessage: ''
 };
 
 function getOrCreateId() {
@@ -45,7 +44,7 @@ async function apiGet(params) {
     return res.json();
 }
 async function apiPost(body) {
-    await fetch(WEB_APP_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    await fetch(WEB_APP_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
 }
 async function loadData() {
     S.loading = true; render();
@@ -67,13 +66,7 @@ async function loadData() {
 }
 async function savePick(conf, team) {
     S.picks[conf] = team; render();
-    try { 
-        await apiPost({ action:'savePick', userId:S.userId, userName:S.userName, conference:conf, team, timestamp:new Date().toISOString() }); 
-        // Reload only leaderboard data (much faster than full loadData)
-        const data = await apiGet({ action: 'getData' });
-        S.allPicks = data.allPicks || [];
-        render();
-    }
+    try { await apiPost({ action:'savePick', userId:S.userId, userName:S.userName, conference:conf, team, timestamp:new Date().toISOString() }); }
     catch(e) { alert('Pick could not be saved. Please try again.'); }
 }
 async function submitName(name, email) {
@@ -396,44 +389,10 @@ function picksView() {
     const sorted = Object.keys(CONFERENCES).sort((a,b) => CONFERENCES[a].tournament_start.localeCompare(CONFERENCES[b].tournament_start));
     const filtered = sorted.filter(c => c.toLowerCase().includes(S.search.toLowerCase()) || CONFERENCES[c].teams.some(t => t.toLowerCase().includes(S.search.toLowerCase())));
     
-    // Build picks summary
-    const picksSummary = sorted.map(conf => {
-        const locked = isLocked(conf);
-        const pick = S.picks[conf];
-        const lockDate = new Date(CONFERENCES[conf].tournament_start + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
-        const status = locked ? '🔒' : (pick ? '✅' : '⏰');
-        const statusText = locked ? 'Locked' : (pick ? `${pick}` : 'No pick');
-        const lockText = locked ? '' : ` (Locks ${lockDate})`;
-        
-        return `
-        <button onclick="document.getElementById('conf-${conf.replace(/[^a-zA-Z0-9]/g,'')}')?.scrollIntoView({behavior:'smooth',block:'center'})" 
-            class="w-full text-left px-3 py-2 hover:bg-gray-50 rounded-lg flex items-center gap-2 text-sm">
-            <span class="text-lg">${status}</span>
-            <span class="font-semibold text-gray-900 flex-shrink-0">${conf}</span>
-            <span class="text-gray-600 truncate">${statusText}</span>
-            <span class="text-gray-400 text-xs ml-auto flex-shrink-0">${lockText}</span>
-        </button>`;
-    }).join('');
-    
-    const totalPicks = Object.keys(S.picks).length;
-    const totalConfs = sorted.length;
-    
     return `
-    <div class="bg-white rounded-xl shadow mb-4 overflow-hidden fade-in">
-        <button onclick="S.picksSummaryExpanded=!S.picksSummaryExpanded;localStorage.setItem('ctc_summary_expanded',S.picksSummaryExpanded);render()" 
-            class="w-full px-4 py-3 flex items-center justify-between bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 transition">
-            <div class="flex items-center gap-2">
-                <span class="text-lg">📋</span>
-                <span class="font-bold text-gray-900">My Picks Summary</span>
-                <span class="text-sm text-gray-600">(${totalPicks}/${totalConfs})</span>
-            </div>
-            <span class="text-gray-400 transform transition-transform ${S.picksSummaryExpanded?'rotate-180':''}"">▼</span>
-        </button>
-        ${S.picksSummaryExpanded ? `<div class="max-h-64 overflow-y-auto p-2">${picksSummary}</div>` : ''}
-    </div>
     <div class="bg-white rounded-xl shadow p-3 mb-4 fade-in">
-        <input id="searchInput" type="text" placeholder="Search conferences or teams…" value="${S.search}"
-            oninput="S.search=this.value;render();setTimeout(()=>{const el=document.getElementById('searchInput');if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}},0)"
+        <input type="text" placeholder="Search conferences or teams…" value="${S.search}"
+            oninput="S.search=this.value;render()"
             class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" />
     </div>
     <div class="space-y-3">${filtered.map(c => conferenceCard(c)).join('')}</div>`;
@@ -446,7 +405,7 @@ function conferenceCard(conf) {
     const cutoff     = Math.min(data.qualifying_teams, data.teams.length);
     const allTeams   = sortedTeams(conf);
     const hasStandings = allTeams.some(t => t.confW !== null);
-    const lockDate   = new Date(data.tournament_start + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const lockDate   = new Date(data.tournament_start).toLocaleDateString('en-US',{month:'short',day:'numeric'});
     const allQualify = cutoff >= data.teams.length;
     const hostCity   = data.host_city || '';
 
@@ -505,7 +464,7 @@ function conferenceCard(conf) {
     });
 
     return `
-    <div id="conf-${conf.replace(/[^a-zA-Z0-9]/g,'')}" class="bg-white rounded-xl shadow overflow-hidden fade-in ${locked?'opacity-80':''}">
+    <div class="bg-white rounded-xl shadow overflow-hidden fade-in ${locked?'opacity-80':''}">
         <div class="px-4 py-3 ${locked?'bg-gray-100':'bg-gradient-to-r from-blue-600 to-indigo-600'} flex items-center justify-between flex-wrap gap-2">
             <div class="flex items-center gap-2">
                 <span class="text-lg">${locked?'🔒':'🏀'}</span>
@@ -597,7 +556,7 @@ function leaderboardView() {
                             ${confs.map(conf => {
                                 const locked = isLocked(conf);
                                 const pick = viewedUser.picks[conf];
-                                const lockDate = new Date(CONFERENCES[conf].tournament_start + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+                                const lockDate = new Date(CONFERENCES[conf].tournament_start).toLocaleDateString('en-US',{month:'short',day:'numeric'});
                                 
                                 if (!locked) {
                                     return `
