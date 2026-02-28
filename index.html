@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conference Tournament Showdown 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .fade-in { animation: fadeIn 0.25s ease-out; }
+        .cutoff-line { border-top: 2px dashed #ef4444; margin: 6px 0 14px; position: relative; }
+        .cutoff-line::before { content: 'TOURNAMENT CUTOFF'; position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: #fef2f2; color: #ef4444; font-size: 9px; font-weight: 800; padding: 0 8px; white-space: nowrap; letter-spacing: 0.08em; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-100 to-blue-100 min-h-screen">
+<div id="app" class="p-4 md:p-6 max-w-6xl mx-auto"></div>
+<script>
+// ⚠️ IMPORTANT: After transferring to conferenceshowdown@gmail.com and redeploying Apps Script,
+// replace the URL below with the new Web App deployment URL
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvKL_bzmlJKf-4t6s680myK3PIdeSecdC5bmA2RqrnFVm6Ec-s0kZfhz1XrZj5IqrsJg/exec';
+const CONFERENCES = {"ACC":{"teams":["Duke","Virginia","Clemson","Miami (FL)","NC State","North Carolina","Louisville","SMU","California","Virginia Tech","Syracuse","Florida St.","Stanford","Wake Forest","Notre Dame","Boston College","Georgia Tech","Pittsburgh"],"tournament_start":"2026-03-10","qualifying_teams":15,"host_city":"Charlotte, NC"},"ASUN":{"teams":["Austin Peay","Central Ark.","Queens (NC)","Lipscomb","West Ga.","FGCU","Bellarmine","Jacksonville","Eastern Ky.","Stetson","North Florida","North Ala."],"tournament_start":"2026-03-04","qualifying_teams":12,"host_city":"Jacksonville, FL"},"America East":{"teams":["NJIT","UMBC","Vermont","UMass Lowell","UAlbany","New Hampshire","Bryant","Maine","Binghamton"],"tournament_start":"2026-03-07","qualifying_teams":8,"host_city":"Higher seed"},"American":{"teams":["South Fla.","Tulsa","Wichita St.","Temple","Charlotte","Memphis","UAB","Tulane","North Texas","Fla. Atlantic","Rice","East Carolina","UTSA"],"tournament_start":"2026-03-11","qualifying_teams":10,"host_city":"Birmingham, AL"},"Atlantic 10":{"teams":["Saint Louis","VCU","George Mason","Dayton","Duquesne","Saint Joseph's","Davidson","George Washington","Rhode Island","Fordham","Richmond","St. Bonaventure","La Salle","Loyola Chicago"],"tournament_start":"2026-03-11","qualifying_teams":14,"host_city":"Pittsburgh, PA"},"Big 12":{"teams":["Houston","Arizona","Iowa St.","Texas Tech","Kansas","BYU","West Virginia","UCF","TCU","Cincinnati","Oklahoma St.","Arizona St.","Colorado","Baylor","Kansas St.","Utah"],"tournament_start":"2026-03-10","qualifying_teams":16,"host_city":"Kansas City, MO"},"Big East":{"teams":["UConn","St. John's (NY)","Villanova","Seton Hall","Creighton","Xavier","Georgetown","DePaul","Butler","Providence","Marquette"],"tournament_start":"2026-03-11","qualifying_teams":11,"host_city":"New York, NY"},"Big Sky":{"teams":["Portland St.","Montana St.","Montana","Eastern Wash.","Northern Colo.","Weber St.","Idaho","Sacramento St.","Northern Ariz.","Idaho St."],"tournament_start":"2026-03-07","qualifying_teams":10,"host_city":"Boise, ID"},"Big South":{"teams":["High Point","Winthrop","Radford","Presbyterian","UNC Asheville","Longwood","Charleston So.","USC Upstate","Gardner-Webb"],"tournament_start":"2026-03-04","qualifying_teams":9,"host_city":"Johnson City, TN"},"Big Ten":{"teams":["Michigan","Illinois","Nebraska","Purdue","Michigan St.","Wisconsin","UCLA","Iowa","Ohio St.","Indiana","Southern California","Washington","Minnesota","Maryland","Rutgers","Oregon","Penn St.","Northwestern"],"tournament_start":"2026-03-10","qualifying_teams":18,"host_city":"Chicago, IL"},"Big West":{"teams":["Hawaii","UC Irvine","UC Santa Barbara","CSUN","UC Davis","UC San Diego","Cal St. Fullerton","Cal Poly","Long Beach St.","UC Riverside","CSU Bakersfield"],"tournament_start":"2026-03-11","qualifying_teams":8,"host_city":"Henderson, NV"},"CAA":{"teams":["UNCW","Col. of Charleston","Monmouth","Hofstra","Stony Brook","Drexel","William & Mary","Campbell","Hampton","Elon","Towson","N.C. A&T","Northeastern"],"tournament_start":"2026-03-06","qualifying_teams":13,"host_city":"Washington, D.C."},"Conference USA":{"teams":["Liberty","Sam Houston","Jacksonville St.","Western Ky.","Louisiana Tech","Missouri St.","Kennesaw St.","Middle Tenn.","UTEP","FIU","Delaware","New Mexico St."],"tournament_start":"2026-03-10","qualifying_teams":10,"host_city":"Huntsville, AL"},"Horizon":{"teams":["Wright St.","Oakland","Robert Morris","Green Bay","Purdue Fort Wayne","Detroit Mercy","Northern Ky.","Milwaukee","Youngstown St.","Cleveland St.","IU Indy"],"tournament_start":"2026-03-02","qualifying_teams":11,"host_city":"Higher seed first 3 rounds, then Indianapolis, IN"},"Ivy League":{"teams":["Yale","Harvard","Penn","Cornell","Columbia","Dartmouth","Princeton","Brown"],"tournament_start":"2026-03-14","qualifying_teams":4,"host_city":"Ithaca, NY"},"MAAC":{"teams":["Merrimack","Saint Peter's","Siena","Quinnipiac","Marist","Fairfield","Mount St. Mary's","Sacred Heart","Manhattan","Iona","Niagara","Canisius","Rider"],"tournament_start":"2026-03-05","qualifying_teams":10,"host_city":"Atlantic City, NJ"},"MAC":{"teams":["Miami (OH)","Akron","Kent St.","Bowling Green","Toledo","Ohio","Massachusetts","Buffalo","Central Mich.","Western Mich.","NIU","Ball St.","Eastern Mich."],"tournament_start":"2026-03-12","qualifying_teams":8,"host_city":"Cleveland, OH"},"MEAC":{"teams":["Morgan St.","Howard","N.C. Central","South Carolina St.","Norfolk St.","UMES","Coppin St.","Delaware St."],"tournament_start":"2026-03-11","qualifying_teams":7,"host_city":"Norfolk, VA"},"Missouri Valley":{"teams":["Belmont","Bradley","Murray St.","UIC","Illinois St.","UNI","Valparaiso","Southern Ill.","Drake","Indiana St.","Evansville"],"tournament_start":"2026-03-05","qualifying_teams":11,"host_city":"St. Louis, MO"},"Mountain West":{"teams":["Utah St.","San Diego St.","New Mexico","Nevada","Grand Canyon","UNLV","Boise St.","Colorado St.","Fresno St.","Wyoming","San Jose St.","Air Force"],"tournament_start":"2026-03-11","qualifying_teams":12,"host_city":"Las Vegas, NV"},"Northeast":{"teams":["LIU","Central Conn. St.","Le Moyne","Mercyhurst","FDU","New Haven","Stonehill","Wagner","Saint Francis","Chicago St."],"tournament_start":"2026-03-04","qualifying_teams":8,"host_city":"Higher seed"},"Ohio Valley":{"teams":["UT Martin","Tennessee St.","Southeast Mo. St.","Morehead St.","SIUE","Lindenwood","Eastern Ill.","Little Rock","Tennessee Tech","Southern Ind.","Western Ill."],"tournament_start":"2026-03-04","qualifying_teams":8,"host_city":"Evansville, IN"},"Patriot":{"teams":["Navy","Colgate","Lehigh","American","Boston U.","Loyola Maryland","Lafayette","Bucknell","Army West Point","Holy Cross"],"tournament_start":"2026-03-03","qualifying_teams":10,"host_city":"Higher seed"},"SEC":{"teams":["Florida","Arkansas","Vanderbilt","Alabama","Tennessee","Kentucky","Texas A&M","Missouri","Texas","Georgia","Auburn","Mississippi St.","Oklahoma","Ole Miss","LSU","South Carolina"],"tournament_start":"2026-03-11","qualifying_teams":16,"host_city":"Nashville, TN"},"SWAC":{"teams":["Bethune-Cookman","Southern U.","Ark.-Pine Bluff","Alabama A&M","Jackson St.","Florida A&M","Texas Southern","Grambling","Alabama St.","Alcorn","Prairie View","Mississippi Val."],"tournament_start":"2026-03-09","qualifying_teams":12,"host_city":"Atlanta, GA"},"SoCon":{"teams":["ETSU","Mercer","Wofford","Furman","Samford","UNC Greensboro","Western Caro.","The Citadel","Chattanooga","VMI"],"tournament_start":"2026-03-06","qualifying_teams":10,"host_city":"Asheville, NC"},"Southland":{"teams":["SFA","McNeese","UTRGV","A&M-Corpus Christi","Nicholls","New Orleans","Lamar University","Northwestern St.","UIW","East Texas A&M","Houston Christian","Southeastern La."],"tournament_start":"2026-03-08","qualifying_teams":8,"host_city":"Lake Charles, LA"},"Summit":{"teams":["North Dakota St.","St. Thomas (MN)","North Dakota","Omaha","South Dakota","Denver","South Dakota St.","Oral Roberts","Kansas City"],"tournament_start":"2026-03-04","qualifying_teams":9,"host_city":"Sioux Falls, SD"},"Sun Belt":{"teams":["South Alabama","App State","Troy","Marshall","Texas St.","Coastal Carolina","Arkansas St.","Ga. Southern","Southern Miss.","Louisiana","James Madison","Georgia St.","Old Dominion","ULM"],"tournament_start":"2026-03-03","qualifying_teams":14,"host_city":"Pensacola, FL"},"WAC":{"teams":["California Baptist","Utah Tech","Utah Valley","UT Arlington","Southern Utah","Abilene Christian","Tarleton St."],"tournament_start":"2026-03-11","qualifying_teams":7,"host_city":"Las Vegas, NV"},"WCC":{"teams":["Gonzaga","Santa Clara","Saint Mary's (CA)","Pacific","San Francisco","Oregon St.","Washington St.","Seattle U","Portland","San Diego","LMU (CA)","Pepperdine"],"tournament_start":"2026-03-05","qualifying_teams":12,"host_city":"Las Vegas, NV"}};
+
+let S = {
+    userId: getOrCreateId(),
+    userName: localStorage.getItem('ctc_name') || '',
+    userEmail: localStorage.getItem('ctc_email') || '',
+    picks: {}, results: {}, standings: {}, gamesToWin: {}, allPicks: [],
+    view: 'setup', search: '', loading: false, error: null, now: new Date(),
+    showRules: false,
+    viewingUserId: null,
+    showRecovery: false,
+    recoveryMessage: '',
+    picksSummaryExpanded: localStorage.getItem('ctc_summary_expanded') !== 'false'
+};
+
+function getOrCreateId() {
+    let id = localStorage.getItem('ctc_uid');
+    if (!id) { id = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2,9); localStorage.setItem('ctc_uid', id); }
+    return id;
+}
+
+async function apiGet(params) {
+    const url = WEB_APP_URL + '?' + new URLSearchParams({...params, userId: S.userId});
+    const res = await fetch(url);
+    return res.json();
+}
+async function apiPost(body) {
+    await fetch(WEB_APP_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+}
+async function loadData() {
+    S.loading = true; render();
+    try {
+        const data = await apiGet({ action: 'getData' });
+        S.picks     = data.picks     || {};
+        S.results   = data.results   || {};
+        S.standings = data.standings || {};
+        S.gamesToWin = data.gamesToWin || {};
+        S.allPicks  = data.allPicks  || [];
+        S.userName  = data.userName  || S.userName;
+        S.error = null;
+    } catch(e) { 
+        console.error('loadData error:', e);
+        S.error = 'Could not load data. Check your connection and refresh.'; 
+    }
+    S.loading = false; 
+    render();
+}
+async function savePick(conf, team) {
+    S.picks[conf] = team; render();
+    try { await apiPost({ action:'savePick', userId:S.userId, userName:S.userName, conference:conf, team, timestamp:new Date().toISOString() }); }
+    catch(e) { alert('Pick could not be saved. Please try again.'); }
+}
+async function submitName(name, email) {
+    S.userName = name; 
+    S.userEmail = email || '';
+    localStorage.setItem('ctc_name', name);
+    if (email) localStorage.setItem('ctc_email', email);
+    try { await apiPost({ action:'saveUserName', userId:S.userId, userName:name, userEmail:email||'' }); } catch(e) {}
+    S.view = 'picks'; loadData();
+}
+
+async function requestRecovery(email) {
+    if (!email || !email.includes('@')) {
+        S.recoveryMessage = 'Please enter a valid email address';
+        render();
+        return;
+    }
+    
+    S.loading = true; render();
+    try {
+        await apiPost({ action:'sendRecovery', email: email });
+        S.recoveryMessage = 'If that email is registered, you\'ll receive a recovery link shortly. Check your inbox!';
+        S.showRecovery = false;
+    } catch(e) {
+        S.recoveryMessage = 'Error sending recovery email. Please try again.';
+    }
+    S.loading = false; render();
+}
+
+function isLocked(conf) { return S.now >= new Date(CONFERENCES[conf].tournament_start + 'T04:00:00-05:00'); }
+
+function calcScore(conf, team) {
+    const r = S.results[conf];
+    if (!r || r.team !== team) return 0;
+    const championBonus = r.isChampion ? 100 : 0;
+    const winBonus = (r.wins || 0) * 20;
+    const seedBonus = r.isChampion && r.seed ? Math.pow(r.seed, 3) : 0;
+    return championBonus + winBonus + seedBonus;
+}
+
+function totalScore(picks) {
+    return Object.keys(picks || S.picks).reduce((s,c) => s + calcScore(c, (picks||S.picks)[c]), 0);
+}
+
+function calcPotential(conf, seed, games) {
+    if (!games) return 0;
+    return 100 + (20 * games) + Math.pow(seed, 3);
+}
+
+function totalPotentialPoints() {
+    let total = 0;
+    Object.keys(S.picks).forEach(conf => {
+        const team = S.picks[conf];
+        const teamData = getTeamData(conf, team);
+        if (!teamData) return;
+        
+        const r = S.results[conf];
+        if (r && r.team === team && !r.isChampion) {
+            total += calcScore(conf, team);
+        } else {
+            total += teamData.potential || 0;
+        }
+    });
+    return total;
+}
+
+function getTeamData(conf, teamName) {
+    const allTeams = sortedTeams(conf);
+    return allTeams.find(t => t.team === teamName);
+}
+
+function leaderboard() {
+    const map = {};
+    S.allPicks.forEach(p => {
+        if (!map[p.userId]) map[p.userId] = { userId:p.userId, name:p.userName||'Anonymous', picks:{} };
+        map[p.userId].picks[p.conference] = p.team;
+    });
+    return Object.values(map).map(u => ({...u, score: totalScore(u.picks)})).sort((a,b) => b.score - a.score);
+}
+
+function pct(w, l) {
+    if (w === null || w === undefined || l === null || l === undefined) return '—';
+    const total = w + l;
+    if (total === 0) return '.000';
+    return '.' + Math.round((w / total) * 1000).toString().padStart(3,'0');
+}
+
+function sortedTeams(conf) {
+    const st = S.standings[conf];
+    const allTeams = CONFERENCES[conf].teams;
+    const gtw = S.gamesToWin[conf] || {};
+    
+    if (!st || st.length === 0) {
+        return allTeams.map((t,i) => ({ 
+            team:t, confW:null, confL:null, ovW:null, ovL:null, streak:null, 
+            seed:i+1, games:gtw[i+1]||0, potential:0
+        }));
+    }
+    
+    const map = {};
+    st.forEach(s => { map[s.team] = s; });
+    const withS = [], without = [];
+    
+    allTeams.forEach((t,i) => {
+        if (map[t]) {
+            const s = map[t];
+            const seed = s.seed || null;
+            withS.push({ 
+                team:t, confW:s.confW, confL:s.confL, ovW:s.ovW, ovL:s.ovL, streak:s.streak||null,
+                seed, games:null, potential:0
+            });
+        } else {
+            without.push({ 
+                team:t, confW:null, confL:null, ovW:null, ovL:null, streak:null,
+                seed:null, games:null, potential:0
+            });
+        }
+    });
+    
+    withS.sort((a,b) => {
+        const pA = a.confW/(a.confW+a.confL)||0, pB = b.confW/(b.confW+b.confL)||0;
+        return pB - pA || b.confW - a.confW;
+    });
+    
+    const sorted = [...withS, ...without];
+    
+    sorted.forEach((t,i) => {
+        const effectiveSeed = t.seed || (i+1);
+        t.seed = effectiveSeed;
+        t.games = gtw[effectiveSeed] || 0;
+        t.potential = calcPotential(conf, effectiveSeed, t.games);
+    });
+    
+    return sorted;
+}
+
+function render() { document.getElementById('app').innerHTML = html(); }
+
+function html() {
+    if (S.loading) return `<div class="flex justify-center items-center min-h-screen"><div class="text-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div><p class="text-gray-500">Loading…</p></div></div>`;
+    if (S.error)   return `<div class="max-w-md mx-auto mt-20 bg-red-50 border border-red-200 rounded-xl p-6"><p class="text-red-800 font-medium">${S.error}</p><button onclick="loadData()" class="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg">Retry</button></div>`;
+    if (S.view === 'setup') return setupView();
+    return rulesModal() + headerHtml() + (S.view==='picks' ? picksView() : S.view==='results' ? resultsView() : leaderboardView());
+}
+
+function rulesModal() {
+    if (!S.showRules) return '';
+    return `
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onclick="S.showRules=false;render()">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <h2 class="text-2xl font-bold text-gray-900">Rules & Scoring</h2>
+                <button onclick="S.showRules=false;render()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            </div>
+            <div class="px-6 py-6 space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">How to Play</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Pick <strong>one team from each D1 conference</strong></li>
+                        <li>• Earn points as your teams win games in their conference tournaments</li>
+                        <li>• Compete on the leaderboard to see who scores the most points</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">Scoring System</h3>
+                    <div class="bg-blue-50 rounded-lg p-4 space-y-2 text-gray-800">
+                        <p><strong class="text-blue-900">100 points</strong> - Conference tournament champion</p>
+                        <p><strong class="text-blue-900">20 points</strong> - Per tournament win</p>
+                        <p><strong class="text-blue-900">seed³ bonus</strong> - Champion seed bonus (e.g., 4-seed = 64 pts)</p>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-3">
+                        <strong>Example:</strong> A 4-seed that wins their conference tournament in 3 games earns:<br>
+                        100 (champion) + 60 (3 wins × 20) + 64 (4³) = <strong>224 total points</strong>
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">⏰ Important Timing Rules</h3>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 space-y-2 text-gray-800">
+                        <p><strong class="text-yellow-900">Picks lock at 4:00 AM EST</strong> on the day each conference tournament begins</p>
+                        <p><strong class="text-yellow-900">Conference standings change daily</strong> as regular season games are played</p>
+                        <p class="text-sm mt-2">💡 Check back frequently! Team seedings and potential points update as standings change</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">Understanding Potential Points</h3>
+                    <p class="text-gray-700 mb-2">The <strong>"Max"</strong> column shows the maximum points each team can earn if they win their conference tournament.</p>
+                    <p class="text-gray-700 mb-2">Your <strong>"Max Points"</strong> total updates as:</p>
+                    <ul class="space-y-1 text-gray-700 ml-4">
+                        <li>• Teams are eliminated (potential drops to actual points earned)</li>
+                        <li>• Standings change (seedings and games-to-win adjust)</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-bold text-gray-900 mb-2">Good Luck! 🏀</h4>
+                    <p class="text-sm text-gray-600">May the best bracket win!</p>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function setupView() {
+    if (S.showRecovery) {
+        return `
+        <div class="max-w-md mx-auto mt-24 bg-white rounded-2xl shadow-xl p-8 fade-in">
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-3">🔑</div>
+                <h1 class="text-3xl font-bold text-gray-900">Recover Your Picks</h1>
+                <p class="text-gray-500 mt-2">Enter the email you used when signing up</p>
+            </div>
+            ${S.recoveryMessage ? `<div class="mb-4 p-3 rounded-lg ${S.recoveryMessage.includes('Error') ? 'bg-red-50 text-red-800' : 'bg-green-50 text-green-800'} text-sm">${S.recoveryMessage}</div>` : ''}
+            <div class="space-y-3">
+                <input id="recoveryEmail" type="email" placeholder="your.email@example.com"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    onkeydown="if(event.key==='Enter') handleRecovery()" />
+                <button onclick="handleRecovery()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+                    Send Recovery Email
+                </button>
+                <button onclick="S.showRecovery=false;S.recoveryMessage='';render()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold transition">
+                    Back to Sign In
+                </button>
+            </div>
+        </div>`;
+    }
+    
+    return `
+    <div class="max-w-md mx-auto mt-24 bg-white rounded-2xl shadow-xl p-8 fade-in">
+        <div class="text-center mb-6">
+            <div class="text-6xl mb-3">🏆</div>
+            <h1 class="text-3xl font-bold text-gray-900">Conference Tournament Showdown</h1>
+            <p class="text-gray-500 mt-2">Pick one team from every D1 conference and earn points as they advance!</p>
+        </div>
+        ${S.recoveryMessage ? `<div class="mb-4 p-3 rounded-lg bg-green-50 text-green-800 text-sm">${S.recoveryMessage}</div>` : ''}
+        <div class="space-y-3">
+            <label class="block text-sm font-semibold text-gray-700">Your Name</label>
+            <input id="nameInput" type="text" value="${S.userName}" placeholder="Enter your name…"
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                onkeydown="if(event.key==='Enter') document.getElementById('emailInput').focus()" />
+            
+            <label class="block text-sm font-semibold text-gray-700">
+                Email <span class="font-normal text-gray-500">(optional - for account recovery)</span>
+            </label>
+            <input id="emailInput" type="email" value="${S.userEmail}" placeholder="your.email@example.com"
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                onkeydown="if(event.key==='Enter') handleName()" />
+            
+            <button onclick="handleName()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+                Start Making Picks →
+            </button>
+            
+            <button onclick="S.showRecovery=true;S.recoveryMessage='';render()" class="w-full text-sm text-blue-600 hover:text-blue-700 font-semibold py-2">
+                Lost access to your picks?
+            </button>
+        </div>
+        <div class="mt-6 bg-blue-50 rounded-xl p-4 text-sm text-blue-800">
+            <p class="font-semibold mb-1">Scoring</p>
+            <p>• <strong>100 pts</strong> for conference champion</p>
+            <p>• <strong>20 pts</strong> per tournament win</p>
+            <p>• <strong>seed³ bonus</strong> for champion (e.g., 4-seed = 64 pts)</p>
+            <p>• Picks lock at 4 AM EST on each tournament start date</p>
+        </div>
+    </div>`;
+}
+
+function headerHtml() {
+    const confs = Object.keys(CONFERENCES);
+    const picked = Object.keys(S.picks).length;
+    const locked = confs.filter(isLocked).length;
+    const score  = totalScore();
+    const potential = totalPotentialPoints();
+    const tabs = ['picks','results','leaderboard'];
+    const labels = ['Make Picks','My Results','Leaderboard'];
+    
+    return `
+    <div class="bg-white rounded-2xl shadow-lg p-5 mb-5 fade-in">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🏆</span>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Conference Tournament Showdown</h1>
+                    <p class="text-gray-500 text-sm">Welcome, <strong>${S.userName}</strong>!</p>
+                    <p class="text-gray-400 text-xs">Questions? <a href="mailto:conferenceshowdown@gmail.com" class="text-blue-600 hover:text-blue-700">conferenceshowdown@gmail.com</a></p>
+                </div>
+            </div>
+            <button onclick="S.showRules=true;render()" 
+                class="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-semibold text-gray-700 transition">
+                <span class="text-lg">ℹ️</span>
+                Rules
+            </button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+            ${statBox('Picks',`${picked}/${confs.length}`,'green')}
+            ${statBox('Locked',locked,'red')}
+            ${statBox('Open',confs.length-locked,'blue')}
+            ${statBox('Score',score,'purple')}
+            ${statBox('Max Points',potential,'yellow')}
+        </div>
+        <div class="flex gap-2">
+            ${tabs.map((t,i)=>`<button onclick="S.view='${t}';render()" class="flex-1 py-2 rounded-lg text-sm font-semibold transition ${S.view===t?'bg-blue-600 text-white':'bg-gray-100 text-gray-600 hover:bg-gray-200'}">${labels[i]}</button>`).join('')}
+        </div>
+    </div>`;
+}
+
+function statBox(label, value, color) {
+    const c = {
+        green:'from-green-50 to-green-100 text-green-900',
+        red:'from-red-50 to-red-100 text-red-900',
+        blue:'from-blue-50 to-blue-100 text-blue-900',
+        purple:'from-purple-50 to-purple-100 text-purple-900',
+        yellow:'from-yellow-50 to-yellow-100 text-yellow-900'
+    };
+    return `<div class="bg-gradient-to-br ${c[color]} rounded-xl p-3 text-center"><div class="text-xs font-medium opacity-70">${label}</div><div class="text-xl font-bold">${value}</div></div>`;
+}
+
+function picksView() {
+    const sorted = Object.keys(CONFERENCES).sort((a,b) => CONFERENCES[a].tournament_start.localeCompare(CONFERENCES[b].tournament_start));
+    const filtered = sorted.filter(c => c.toLowerCase().includes(S.search.toLowerCase()) || CONFERENCES[c].teams.some(t => t.toLowerCase().includes(S.search.toLowerCase())));
+    
+    // Build picks summary
+    const picksSummary = sorted.map(conf => {
+        const locked = isLocked(conf);
+        const pick = S.picks[conf];
+        const lockDate = new Date(CONFERENCES[conf].tournament_start + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+        const status = locked ? '🔒' : (pick ? '✅' : '⏰');
+        const statusText = locked ? 'Locked' : (pick ? `${pick}` : 'No pick');
+        const lockText = locked ? '' : ` (Locks ${lockDate})`;
+        
+        return `
+        <button onclick="document.getElementById('conf-${conf.replace(/[^a-zA-Z0-9]/g,'')}')?.scrollIntoView({behavior:'smooth',block:'center'})" 
+            class="w-full text-left px-3 py-2 hover:bg-gray-50 rounded-lg flex items-center gap-2 text-sm">
+            <span class="text-lg">${status}</span>
+            <span class="font-semibold text-gray-900 flex-shrink-0">${conf}</span>
+            <span class="text-gray-600 truncate">${statusText}</span>
+            <span class="text-gray-400 text-xs ml-auto flex-shrink-0">${lockText}</span>
+        </button>`;
+    }).join('');
+    
+    const totalPicks = Object.keys(S.picks).length;
+    const totalConfs = sorted.length;
+    
+    return `
+    <div class="bg-white rounded-xl shadow mb-4 overflow-hidden fade-in">
+        <button onclick="S.picksSummaryExpanded=!S.picksSummaryExpanded;localStorage.setItem('ctc_summary_expanded',S.picksSummaryExpanded);render()" 
+            class="w-full px-4 py-3 flex items-center justify-between bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 transition">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">📋</span>
+                <span class="font-bold text-gray-900">My Picks Summary</span>
+                <span class="text-sm text-gray-600">(${totalPicks}/${totalConfs})</span>
+            </div>
+            <span class="text-gray-400 transform transition-transform ${S.picksSummaryExpanded?'rotate-180':''}">▼</span>
+        </button>
+        ${S.picksSummaryExpanded ? `<div class="max-h-64 overflow-y-auto p-2">${picksSummary}</div>` : ''}
+    </div>
+    <div class="bg-white rounded-xl shadow p-3 mb-4 fade-in">
+        <input type="text" placeholder="Search conferences or teams…" value="${S.search}"
+            oninput="S.search=this.value;render()"
+            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" />
+    </div>
+    <div class="space-y-3">${filtered.map(c => conferenceCard(c)).join('')}</div>`;
+}
+
+function conferenceCard(conf) {
+    const locked     = isLocked(conf);
+    const selected   = S.picks[conf];
+    const data       = CONFERENCES[conf];
+    const cutoff     = Math.min(data.qualifying_teams, data.teams.length);
+    const allTeams   = sortedTeams(conf);
+    const hasStandings = allTeams.some(t => t.confW !== null);
+    const lockDate   = new Date(data.tournament_start + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const allQualify = cutoff >= data.teams.length;
+    const hostCity   = data.host_city || '';
+
+    const colHeaders = hasStandings ? `
+        <div class="flex items-center gap-1 px-3 py-1 mb-1 border-b border-gray-100 text-gray-400 text-xs font-semibold">
+            <span class="w-5 text-center">#</span>
+            <span class="flex-1 pl-1">Team</span>
+            <span class="w-12 text-center">Conf</span>
+            <span class="w-10 text-center">C%</span>
+            <span class="w-12 text-center">Ovr</span>
+            <span class="w-10 text-center">O%</span>
+            <span class="w-12 text-center">Streak</span>
+            <span class="w-12 text-center">Max</span>
+        </div>` : '';
+
+    let rows = colHeaders;
+    allTeams.forEach((t, i) => {
+        const below = !allQualify && i >= cutoff;
+        const isSel = selected === t.team;
+        if (!allQualify && i === cutoff) rows += `<div class="cutoff-line"></div>`;
+
+        const rankSpan = hasStandings && t.confW !== null
+            ? `<span class="text-xs font-bold w-5 text-center ${isSel?'text-blue-200':below?'text-red-400':'text-gray-400'}">${i+1}</span>`
+            : `<span class="w-5 inline-block"></span>`;
+
+        const sc = isSel ? 'text-blue-200' : below ? 'text-red-400' : 'text-gray-400';
+        const potentialColor = isSel ? 'text-blue-100 font-bold' : below ? 'text-red-500' : 'text-emerald-600';
+        
+        const statCols = hasStandings ? `
+            <span class="text-xs ${sc} w-12 text-center tabular-nums">${t.confW!==null?`${t.confW}-${t.confL}`:'—'}</span>
+            <span class="text-xs ${sc} w-10 text-center tabular-nums">${pct(t.confW,t.confL)}</span>
+            <span class="text-xs ${sc} w-12 text-center tabular-nums">${t.ovW!==null?`${t.ovW}-${t.ovL}`:'—'}</span>
+            <span class="text-xs ${sc} w-10 text-center tabular-nums">${pct(t.ovW,t.ovL)}</span>
+            <span class="text-xs ${sc} w-12 text-center">${t.streak || '—'}</span>
+            <span class="text-xs ${potentialColor} w-12 text-center font-semibold tabular-nums">${t.potential || '—'}</span>` : '';
+
+        const safeConf = conf.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        const safeTeam = t.team.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+        if (locked) {
+            rows += `<div class="flex items-center gap-1 px-3 py-2 rounded-lg ${isSel?'bg-gray-200 font-semibold':''} ${below?'opacity-40':''}">
+                ${rankSpan}
+                <span class="text-sm text-gray-600 flex-1 pl-1">${t.team}</span>
+                ${statCols}
+                ${isSel?'<span class="text-xs bg-gray-500 text-white px-2 py-0.5 rounded-full ml-1">Your Pick</span>':''}
+            </div>`;
+        } else {
+            rows += `<button onclick="savePick('${safeConf}','${safeTeam}');render()"
+                class="w-full flex items-center gap-1 px-3 py-2 rounded-lg text-left transition
+                    ${isSel?'bg-blue-600 text-white shadow-md':below?'bg-red-50 hover:bg-red-100 text-red-700':'bg-gray-50 hover:bg-gray-100 text-gray-800'}">
+                ${rankSpan}
+                <span class="text-sm font-medium flex-1 pl-1">${t.team}</span>
+                ${statCols}
+            </button>`;
+        }
+    });
+
+    return `
+    <div id="conf-${conf.replace(/[^a-zA-Z0-9]/g,'')}" class="bg-white rounded-xl shadow overflow-hidden fade-in ${locked?'opacity-80':''}">
+        <div class="px-4 py-3 ${locked?'bg-gray-100':'bg-gradient-to-r from-blue-600 to-indigo-600'} flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">${locked?'🔒':'🏀'}</span>
+                <span class="font-bold ${locked?'text-gray-700':'text-white'}">${conf}</span>
+                ${selected?`<span class="text-xs px-2 py-0.5 rounded-full ${locked?'bg-gray-300 text-gray-700':'bg-white/20 text-white'}">✓ ${selected}</span>`:''}
+            </div>
+            <div class="text-xs ${locked?'text-gray-500':'text-blue-100'}">
+                ${hostCity?`📍 ${hostCity} · `:''}${locked?'🔒 LOCKED':`Locks ${lockDate} · Top ${cutoff} qualify`}
+            </div>
+        </div>
+        ${!locked
+            ? `<div class="p-3 space-y-1">${rows}</div>`
+            : `<div class="p-3">${selected
+                ? `<p class="text-sm text-gray-600">Your pick: <strong>${selected}</strong></p>`
+                : `<p class="text-sm text-gray-400 italic">No pick made before lock.</p>`}</div>`}
+    </div>`;
+}
+
+function resultsView() {
+    const entries = Object.keys(S.picks);
+    return `
+    <div class="bg-white rounded-xl shadow p-5 fade-in">
+        <h2 class="text-xl font-bold text-gray-900 mb-1">My Results</h2>
+        <p class="text-gray-500 text-sm mb-5">Scores update as tournament results are entered.</p>
+        ${entries.length===0
+            ? `<p class="text-center text-gray-400 py-10">No picks yet — head to "Make Picks"!</p>`
+            : `<div class="space-y-2">${entries.map(conf => {
+                const team=S.picks[conf];
+                const score=calcScore(conf,team);
+                const r=S.results[conf];
+                const mine=r&&r.team===team;
+                const teamData = getTeamData(conf, team);
+                const potential = teamData ? teamData.potential : 0;
+                const remainingPotential = (r && mine && !r.isChampion) ? score : potential;
+                
+                return `<div class="flex items-center justify-between border border-gray-100 rounded-xl px-4 py-3 hover:bg-gray-50">
+                    <div class="flex-1">
+                        <div class="font-semibold text-gray-900 text-sm">${conf}</div>
+                        <div class="text-gray-500 text-xs">${team}</div>
+                        ${mine?`<div class="text-xs mt-0.5 ${r.isChampion?'text-yellow-600 font-semibold':'text-green-600'}">
+                            ${r.isChampion?'🏆 CHAMPION · ':''}${r.wins} win${r.wins!==1?'s':''} ${r.seed?`· ${r.seed}-seed`:''}
+                        </div>`:''}
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-blue-600">${score}</div>
+                        <div class="text-xs text-gray-400">pts</div>
+                        <div class="text-xs font-semibold mt-1 ${remainingPotential === potential ? 'text-emerald-600' : 'text-gray-500'}">
+                            ${remainingPotential} max
+                        </div>
+                    </div>
+                </div>`;
+            }).join('')}</div>
+            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                <span class="font-bold text-gray-700">Total Score</span>
+                <span class="text-3xl font-bold text-blue-600">${totalScore()}</span>
+            </div>`}
+    </div>`;
+}
+
+function leaderboardView() {
+    const board=leaderboard(), myRank=board.findIndex(u=>u.userId===S.userId)+1;
+    const medals=['🥇','🥈','🥉'];
+    
+    // Modal for viewing another user's picks
+    let viewModal = '';
+    if (S.viewingUserId) {
+        const viewedUser = board.find(u => u.userId === S.viewingUserId);
+        if (viewedUser) {
+            const confs = Object.keys(CONFERENCES).sort((a,b) => CONFERENCES[a].tournament_start.localeCompare(CONFERENCES[b].tournament_start));
+            viewModal = `
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onclick="S.viewingUserId=null;render()">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+                    <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-gray-900">${viewedUser.name}'s Picks</h2>
+                        <button onclick="S.viewingUserId=null;render()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="mb-4 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4">
+                            <div>
+                                <div class="text-sm text-gray-600">Total Score</div>
+                                <div class="text-3xl font-bold text-blue-600">${viewedUser.score}</div>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-600">Picks Made</div>
+                                <div class="text-3xl font-bold text-gray-900">${Object.keys(viewedUser.picks).length}</div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            ${confs.map(conf => {
+                                const locked = isLocked(conf);
+                                const pick = viewedUser.picks[conf];
+                                const lockDate = new Date(CONFERENCES[conf].tournament_start + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+                                
+                                if (!locked) {
+                                    return `
+                                    <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 bg-gray-50">
+                                        <div>
+                                            <div class="font-semibold text-gray-900 text-sm">${conf}</div>
+                                            <div class="text-xs text-gray-500">🔒 Locks ${lockDate}</div>
+                                        </div>
+                                        <div class="text-xs text-gray-400 italic">Not yet visible</div>
+                                    </div>`;
+                                }
+                                
+                                if (!pick) {
+                                    return `
+                                    <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 bg-red-50">
+                                        <div>
+                                            <div class="font-semibold text-gray-900 text-sm">${conf}</div>
+                                        </div>
+                                        <div class="text-xs text-red-600 font-semibold">No pick made</div>
+                                    </div>`;
+                                }
+                                
+                                const r = S.results[conf];
+                                const score = calcScore(conf, pick);
+                                const mine = r && r.team === pick;
+                                
+                                return `
+                                <div class="flex items-center justify-between border border-gray-100 rounded-lg px-4 py-3 hover:bg-gray-50">
+                                    <div>
+                                        <div class="font-semibold text-gray-900 text-sm">${conf}</div>
+                                        <div class="text-gray-600 text-xs">${pick}</div>
+                                        ${mine?`<div class="text-xs mt-0.5 ${r.isChampion?'text-yellow-600 font-semibold':'text-green-600'}">
+                                            ${r.isChampion?'🏆 CHAMPION · ':''}${r.wins} win${r.wins!==1?'s':''}
+                                        </div>`:''}
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xl font-bold text-blue-600">${score}</div>
+                                        <div class="text-xs text-gray-400">pts</div>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+    }
+    
+    return viewModal + `
+    <div class="bg-white rounded-xl shadow p-5 fade-in">
+        <h2 class="text-xl font-bold text-gray-900 mb-1">Leaderboard</h2>
+        ${myRank>0?`<p class="text-sm text-blue-600 font-medium mb-4">You are ranked #${myRank} of ${board.length}</p>`:'<p class="text-sm text-gray-400 mb-4">Make picks to appear on the leaderboard!</p>'}
+        <div class="space-y-2">
+            ${board.length===0?`<p class="text-center text-gray-400 py-10">No participants yet!</p>`
+            :board.map((u,i)=>`
+            <div class="flex items-center gap-3 px-4 py-3 rounded-xl border ${u.userId===S.userId?'border-blue-400 bg-blue-50':'border-gray-100'}">
+                <div class="text-xl w-8 text-center flex-shrink-0">${medals[i]||`#${i+1}`}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-gray-900 text-sm truncate">${u.name} ${u.userId===S.userId?'<span class="text-xs text-blue-500">(You)</span>':''}</div>
+                    <div class="text-xs text-gray-400">${Object.keys(u.picks).length} picks</div>
+                </div>
+                <div class="text-2xl font-bold text-blue-600 flex-shrink-0">${u.score}</div>
+                ${u.userId!==S.userId?`<button onclick="S.viewingUserId='${u.userId}';render()" class="ml-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-semibold text-gray-700 transition flex-shrink-0">View Picks</button>`:''}
+            </div>`).join('')}
+        </div>
+    </div>`;
+}
+
+function handleName() {
+    const name = document.getElementById('nameInput').value.trim();
+    const email = document.getElementById('emailInput') ? document.getElementById('emailInput').value.trim() : '';
+    if (name) submitName(name, email);
+}
+
+function handleRecovery() {
+    const email = document.getElementById('recoveryEmail').value.trim();
+    requestRecovery(email);
+}
+
+setInterval(()=>{ S.now=new Date(); render(); }, 60000);
+
+// Handle recovery link from email
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('recover')) {
+    const recoveredUserId = urlParams.get('recover');
+    localStorage.setItem('ctc_uid', recoveredUserId);
+    localStorage.setItem('ctc_name', 'Recovered User'); // Temporary, will be loaded from sheet
+    // Remove the recover parameter from URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    S.userId = recoveredUserId;
+    S.view = 'picks';
+    loadData();
+} else if (S.userName) { 
+    S.view='picks'; 
+    loadData(); 
+} else { 
+    render(); 
+}
+</script>
+</body>
+</html>
